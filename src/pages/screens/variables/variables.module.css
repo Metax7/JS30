@@ -1,0 +1,23 @@
+.main {
+    --base: #ffc600;
+    --spacing: 10px;
+    --blur: 10px;
+}
+
+.controls {
+    margin-bottom: 50px;
+}
+
+img {
+    padding: var(--spacing);
+    background: var(--base);
+    filter: blur(var(--blur));
+}
+
+.hl {
+    color: var(--base);
+}
+
+input {
+    width: 100px;
+}
