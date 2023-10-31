@@ -17,6 +17,6 @@ phases:
       - npm run build
   post_build:
     commands:
-      - aws s3 cp --recursive ./build s3://js30.metax7.my-best-code.com/
+      - aws s3 cp --recursive ./dist s3://js30.metax7.my-best-code.com/
       - aws s3 cp --metadata-directive REPLACE --cache-control="max-age=0, s-maxage=86400" ./dist/index.html s3://js30.metax7.my-best-code.com/
       - aws cloudfront create-invalidation --distribution-id $CF_DISTR_ID --paths /index.html
