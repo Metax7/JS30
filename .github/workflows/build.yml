@@ -6,7 +6,7 @@ env:
 on:
   push:
     branches: ["!main", "*/*"]
-  workflow_dispatch:
+  # workflow_dispatch:
   # push:
   #   branches:
   #     - '*'         # matches every branch that doesn't contain a '/'
