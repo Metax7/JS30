@@ -44,7 +44,7 @@ export default function Home() {
     },
     {
       cardImg: CardImg7,
-      cardTitle: "Array Cardio Day 1",
+      cardTitle: "Array Cardio Day 2",
       cardLink: "/array-cardio-2",
     },
     {
