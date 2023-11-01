@@ -1,0 +1,22 @@
+version: 0.2
+
+env:
+  parameter-store:
+    CF_DISTR_ID: "/sandbox/metax7/js30/CF_DISTR_ID"
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    commands:
+      - echo installing npm dependencies
+      - npm install
+  build:
+    commands:
+      - echo Build started on 'date'
+      - npm run build
+  post_build:
+    commands:
+      - aws s3 cp --recursive ./dist s3://js30.metax7.my-best-code.com/
+      - aws s3 cp --metadata-directive REPLACE --cache-control="max-age=0, s-maxage=86400" ./dist/index.html s3://js30.metax7.my-best-code.com/
+      - aws cloudfront create-invalidation --distribution-id $CF_DISTR_ID --paths /index.html

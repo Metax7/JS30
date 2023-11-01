@@ -4,17 +4,12 @@
 # You can adjust the behavior by modifying this file.
 # For more information, see:
 # https://github.com/github/super-linter
-name: Lint Code Base
+name: LINT
 
 on:
-  # push:
-  #   branches:       
-  #     - '*'         # matches every branch that doesn't contain a '/'
-  #     - '*/*'       # matches every branch containing a single '/'
-  #     - '**'        # matches every branch
-  #     - '!master'   # excludes master
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 jobs:
   run-lint:
     runs-on: ubuntu-latest

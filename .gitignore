@@ -50,6 +50,9 @@ sketch
 # comment the following lines
 !.yarn/cache
 
+### vite ###
+dist/*
+
 # and uncomment the following lines
 # .pnp.*
 
