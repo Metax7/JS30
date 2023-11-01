@@ -19,7 +19,7 @@ export default function Header() {
             </h1>
           </div>
           <div>
-            <a href="https://github.com/Metax7" target="_blank" rel="noopener noreferrer" className="text-5xl">
+            <a href="https://github.com/Metax7/JS30" target="_blank" rel="noopener noreferrer" className="text-5xl">
               <FaGithub />
             </a>
           </div>
