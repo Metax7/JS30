@@ -7,8 +7,15 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+import PropTypes from "prop-types";
 
 export default function ScriptCard(props) {
+  ScriptCard.propTypes = {
+    cardTitle: PropTypes.string.isRequired,
+    cardLink: PropTypes.string.isRequired,
+    cardImg: PropTypes.string.isRequired,
+  };
+
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">
       <CardHeader color="blue-gray" className="relative h-56">
