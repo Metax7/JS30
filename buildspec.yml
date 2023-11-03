@@ -15,6 +15,7 @@ phases:
     commands:
       - echo Build started on 'date'
       - npm run build
+      - npm audit fix
   post_build:
     commands:
       - aws s3 cp --recursive ./dist s3://js30.metax7.my-best-code.com/
