@@ -24,7 +24,7 @@ phases:
   post_build:
     on-failure: ABORT
     commands:
-      - aws s3 cp --recursive ./dist s3://js30.metax7.my-best-code.com/
-      - aws s3 cp --metadata-directive REPLACE --cache-control="max-age=60, s-maxage=86400" ./dist/index.html s3://js30.metax7.my-best-code.com/
+      - aws s3 cp --recursive ./dist s3://js30.metax7.my-best-code.com/ --acl public-read
+      - aws s3 cp --metadata-directive REPLACE --cache-control="max-age=60, s-maxage=86400" ./dist/index.html s3://js30.metax7.my-best-code.com/ --acl public-read
       - aws cloudfront create-invalidation --distribution-id $CF_DISTR_ID --paths '/*'
   
