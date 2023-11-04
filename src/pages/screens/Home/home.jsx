@@ -1,5 +1,5 @@
 import ScriptCard from "../../../components/scriptCard";
-import CardImg from "../../../assets/img/small0.webp";
+import CardImg from "../../../assets/img/drumCardBg.webp";
 import CardImg2 from "../../../assets/img/small1.webp";
 import CardImg3 from "../../../assets/img/small2.webp";
 import CardImg4 from "../../../assets/img/small3.jpg";
@@ -9,6 +9,7 @@ import CardImg7 from "../../../assets/img/small6.webp";
 import CardImg8 from "../../../assets/img/small7.webp";
 import CardImg9 from "../../../assets/img/small8.webp";
 import CardImg10 from "../../../assets/img/small9.webp";
+import CardImg11 from "../../../assets/img/small10.webp";
 
 export default function Home() {
   const card = [
@@ -61,6 +62,11 @@ export default function Home() {
       cardImg: CardImg10,
       cardTitle: "Hold Shift to Check Multiple Checkboxes",
       cardLink: "/checkboxes",
+    },
+    {
+      cardImg: CardImg11,
+      cardTitle: "Custom Video Player",
+      cardLink: "/video-player",
     },
   ];
 
