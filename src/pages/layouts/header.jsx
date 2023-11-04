@@ -1,5 +1,5 @@
 import { FaGithub } from "react-icons/fa";
-import JsLogo from "../../assets/img/JavaScript-Blog-Cover.png";
+import Logo from "../../assets/img/logo.png";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex max-sm:flex-col max-sm:space-y-5 items-center sm:justify-around 2xl:justify-between">
           <div>
             <Link to={""}>
-              <img src={JsLogo} className="w-24" alt="" />
+              <img src={Logo} className="w-28" alt="" />
             </Link>
           </div>
           <div>
@@ -19,7 +19,7 @@ export default function Header() {
             </h1>
           </div>
           <div>
-            <a href="https://github.com/Metax7/JS30" target="_blank" rel="noopener noreferrer" className="text-5xl">
+            <a href="https://github.com/Metax7/JS30" target="_blank" rel="noopener noreferrer" className="text-6xl">
               <FaGithub />
             </a>
           </div>
