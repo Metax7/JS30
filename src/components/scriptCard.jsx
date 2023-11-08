@@ -7,7 +7,9 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+import { BiSolidLike } from "react-icons/bi";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function ScriptCard(props) {
   ScriptCard.propTypes = {
@@ -15,6 +17,13 @@ export default function ScriptCard(props) {
     cardLink: PropTypes.string.isRequired,
     cardImg: PropTypes.string.isRequired,
   };
+
+  const [like, setLike] = useState(100),
+    [isLike, setIsLike] = useState(false),
+    likeButtonClick = () => {
+      setLike(like + (isLike ? -1 : 1));
+      setIsLike(!isLike);
+    };
 
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">
@@ -26,10 +35,23 @@ export default function ScriptCard(props) {
           {props.cardTitle}
         </Typography>
       </CardBody>
-      <CardFooter className="pt-0">
+      <CardFooter className="flex items-center justify-between pt-0">
         <Link to={props.cardLink}>
           <Button>SEE MORE</Button>
         </Link>
+        <div>
+          <button
+            className={
+              "" +
+              (isLike
+                ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-red-600"
+                : "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827]")
+            }
+            onClick={likeButtonClick}
+          >
+            <BiSolidLike /> <span>{like}</span>
+          </button>
+        </div>
       </CardFooter>
     </Card>
   );
