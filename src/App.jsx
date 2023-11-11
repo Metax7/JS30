@@ -13,6 +13,7 @@ import CanvasPainting from "./pages/screens/canvasPainting/canvasPainting";
 import DevTools from "./pages/screens/devToolsDomination/devTools";
 import CheckBoxes from "./pages/screens/checkBoxes/checkBoxes";
 import VideoPlayer from "./pages/screens/videoPlayer/videoPlayer";
+import NotFound from "./pages/not-found/NotFound";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
         <Route path="/dev-tools" element={<DevTools />} />
         <Route path="/checkboxes" element={<CheckBoxes />} />
         <Route path="/video-player" element={<VideoPlayer />} />
+
+
+        <Route path="*" element={<NotFound />} />
+
       </Routes>
     </>
   );
