@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex max-sm:flex-col max-sm:space-y-5 items-center sm:justify-around 2xl:justify-between">
           <div>
             <Link to={""}>
-              <img src={Logo} className="w-28" alt="" />
+              <img src={Logo} className="w-24" alt="" />
             </Link>
           </div>
           <div>
@@ -19,7 +19,12 @@ export default function Header() {
             </h1>
           </div>
           <div>
-            <a href="https://github.com/Metax7/JS30" target="_blank" rel="noopener noreferrer" className="text-6xl">
+            <a
+              href="https://github.com/Metax7/JS30"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-6xl"
+            >
               <FaGithub />
             </a>
           </div>
