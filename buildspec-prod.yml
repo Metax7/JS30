@@ -4,7 +4,7 @@ version: 0.2
 
 env:
   parameter-store:
-    JS30_CF_DISTR_ID: "/sandbox/metax7/js30/prod/CF_DISTR_ID"
+    JS30_CF_DISTR_ID: "/sandbox/metax7/js30/prod/JS30_CF_DISTR_ID"
     JS30_FULL_DOMAIN: "/sandbox/metax7/js30/prod/JS30_FULL_DOMAIN"
     JS30_ENV: "/sandbox/metax7/js30/prod/JS30_ENV"
     JS30_AUTH_HEADER: "/sandbox/metax7/js30/prod/JS30_AUTH_HEADER"
