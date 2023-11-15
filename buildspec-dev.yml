@@ -13,6 +13,7 @@ env:
     JS30_APP_NAME: "/sandbox/metax7/js30/dev/JS30_APP_NAME"
     JS30_IDP_URL: "/sandbox/metax7/js30/dev/JS30_IDP_URL"
     JS30_AUTHORIZER_URL: "/sandbox/metax7/js30/dev/JS30_AUTHORIZER_URL"
+    JS30_CACHE_CONTROL: "/sandbox/metax7/js30/dev/JS30_CACHE_CONTROL"
 
 phases:
   install:
@@ -34,6 +35,6 @@ phases:
     on-failure: ABORT
     commands:
       - aws s3 cp --recursive ./dist s3://$JS30_FULL_DOMAIN/ 
-      - aws s3 cp --metadata-directive REPLACE --cache-control="max-age=60, s-maxage=86400" ./dist/index.html s3://$JS30_FULL_DOMAIN/ 
+      - aws s3 cp --metadata-directive REPLACE --cache-control="${JS30_CACHE_CONTROL}" ./dist/index.html s3://$JS30_FULL_DOMAIN/ 
       - aws cloudfront create-invalidation --distribution-id $JS30_CF_DISTR_ID --paths '/*'
   
