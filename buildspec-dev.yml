@@ -36,5 +36,4 @@ phases:
     commands:
       - aws s3 cp --recursive ./dist s3://${JS30_FULL_DOMAIN}/ 
       - aws s3 cp --metadata-directive REPLACE --cache-control="${JS30_CACHE_CONTROL}" ./dist/index.html s3://${JS30_FULL_DOMAIN}/ 
-      - aws cloudfront create-invalidation --distribution-id ${JS30_CF_DISTR_ID} --paths '/*'
   
