@@ -41,6 +41,7 @@ const ArrayCardio2 = () => {
   );
 
   console.log(adultAll);
+  console.log(import.meta.env.VITE_JS30_ENV)
 
   // Array.prototype.find()
   // Find is like filter, but instead returns just the one you are looking for
