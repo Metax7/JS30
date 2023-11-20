@@ -8,22 +8,69 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { BiSolidLike } from "react-icons/bi";
-import PropTypes from "prop-types";
 import { useState } from "react";
+import axios from "axios";
 
 export default function ScriptCard(props) {
-  ScriptCard.propTypes = {
-    cardTitle: PropTypes.string.isRequired,
-    cardLink: PropTypes.string.isRequired,
-    cardImg: PropTypes.string.isRequired,
-  };
+  const [like, setLike] = useState(0);
+  const [isLike, setIsLike] = useState(false);
 
-  const [like, setLike] = useState(100),
-    [isLike, setIsLike] = useState(false),
-    likeButtonClick = () => {
-      setLike(like + (isLike ? -1 : 1));
-      setIsLike(!isLike);
+  const likeButtonClick = async () => {
+    const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
+    const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
+    const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
+
+    console.log("apiBaseUrl:", apiBaseUrl);
+    console.log("apiKey:", apiKey);
+    console.log("authHeader:", authHeader);
+
+    if (!apiBaseUrl || !apiKey || !authHeader) {
+      console.error("Некорректные переменные окружения.");
+      return;
+    }
+
+    const likeApiUrl = `${apiBaseUrl}/items/like`;
+    const dislikeApiUrl = `${apiBaseUrl}/items/dislike`;
+
+    const headers = {
+      "Content-Type": "application/json",
+      [authHeader]: apiKey,
     };
+
+    const requestBody = {};
+
+    try {
+      const response = await axios.post(likeApiUrl, requestBody, { headers });
+
+      if (response.status === 200) {
+        console.log("Лайк успешно поставлен!");
+
+        setLike(like + (isLike ? -1 : 1));
+        setIsLike(!isLike);
+
+        const dislikeResponse = await axios.post(
+          dislikeApiUrl,
+          {
+            taskIds: [response.data.id],
+          },
+          { headers }
+        );
+
+        if (dislikeResponse.status === 200) {
+          console.log("Дизлайк успешно поставлен!");
+        } else {
+          console.error(
+            "Не удалось поставить дизлайк. Статус:",
+            dislikeResponse.status
+          );
+        }
+      } else {
+        console.error("Не удалось поставить лайк. Статус:", response.status);
+      }
+    } catch (error) {
+      console.error("Ошибка во время запроса:", error);
+    }
+  };
 
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">

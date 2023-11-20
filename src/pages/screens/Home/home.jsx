@@ -75,14 +75,7 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {card &&
           card.map((item, index) => {
-            return (
-              <ScriptCard
-                key={index}
-                cardImg={item.cardImg}
-                cardTitle={item.cardTitle}
-                cardLink={item.cardLink}
-              />
-            );
+            return <ScriptCard key={index} {...item} />;
           })}
       </div>
     </div>

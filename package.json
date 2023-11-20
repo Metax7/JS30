@@ -1,5 +1,5 @@
 {
-  "name": "blyad",
+  "name": "js30",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.2",
     "@vitejs/plugin-vue": "^4.4.0",
+    "axios": "^1.6.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
