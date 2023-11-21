@@ -15,55 +15,33 @@ export default function ScriptCard(props) {
   const [like, setLike] = useState(0);
   const [isLike, setIsLike] = useState(false);
 
+  const userName = "Jack Sparrow";
+
   const likeButtonClick = async () => {
     const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
     const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
 
-    console.log("apiBaseUrl:", apiBaseUrl);
-    console.log("apiKey:", apiKey);
-    console.log("authHeader:", authHeader);
-
-    if (!apiBaseUrl || !apiKey || !authHeader) {
-      console.error("Некорректные переменные окружения.");
-      return;
-    }
-
-    const likeApiUrl = `${apiBaseUrl}/items/like`;
-    const dislikeApiUrl = `${apiBaseUrl}/items/dislike`;
+    const apiUrl = `${apiBaseUrl}/items/like`;
 
     const headers = {
       "Content-Type": "application/json",
       [authHeader]: apiKey,
     };
 
-    const requestBody = {};
+    const requestBody = {
+      username: userName,
+    };
 
     try {
-      const response = await axios.post(likeApiUrl, requestBody, { headers });
+      const response = await axios.post(apiUrl, requestBody, { headers });
 
       if (response.status === 200) {
         console.log("Лайк успешно поставлен!");
 
         setLike(like + (isLike ? -1 : 1));
+
         setIsLike(!isLike);
-
-        const dislikeResponse = await axios.post(
-          dislikeApiUrl,
-          {
-            taskIds: [response.data.id],
-          },
-          { headers }
-        );
-
-        if (dislikeResponse.status === 200) {
-          console.log("Дизлайк успешно поставлен!");
-        } else {
-          console.error(
-            "Не удалось поставить дизлайк. Статус:",
-            dislikeResponse.status
-          );
-        }
       } else {
         console.error("Не удалось поставить лайк. Статус:", response.status);
       }
@@ -91,7 +69,7 @@ export default function ScriptCard(props) {
             className={
               "" +
               (isLike
-                ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-red-600"
+                ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-blue-600"
                 : "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827]")
             }
             onClick={likeButtonClick}
