@@ -21,8 +21,9 @@ export default function ScriptCard(props) {
     const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
     const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
+    const appEnv = import.meta.env.VITE_JS30_ENV;
 
-    const apiUrl = `${apiBaseUrl}/items/like`;
+    const apiUrl = `${apiBaseUrl}/${appEnv}/items/like`;
 
     const headers = {
       "Content-Type": "application/json",
@@ -34,7 +35,12 @@ export default function ScriptCard(props) {
     };
 
     try {
-      const response = await axios.post(apiUrl, requestBody, { headers });
+      const response = await axios.post(
+        apiUrl,
+        requestBody,
+        { headers },
+        { params: { ItemId: props.id.toString() } }
+      );
 
       if (response.status === 200) {
         console.log("Лайк успешно поставлен!");
