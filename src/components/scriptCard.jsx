@@ -16,7 +16,9 @@ export default function ScriptCard(props) {
   const [like, setLike] = useState(0);
   const [isLike, setIsLike] = useState(false);
   const [loading, setLoading] = useState(false);
-  const userName = "Jack Sparrow";
+  const userName = "someUserId1";
+
+
 
   const fetchLikes = async () => {
     setLoading(true);
@@ -26,18 +28,18 @@ export default function ScriptCard(props) {
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
     const appEnv = import.meta.env.VITE_JS30_ENV;
     console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
-    const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes`;
+    const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes/${userName}`;
 
     const headers = {
       "Content-Type": "application/json",
-      [authHeader]: apiKey,
+      [authHeader]: apiKey
     };
 
     try {
       const response = await axios.get(apiUrl, { headers });
 
-      if (response && response.data && response.data.likes !== undefined) {
-        setLike(response.data.likes);
+      if (response && response.data !== undefined) {
+        setLike(response.data);
       } else {
         console.error("Некорректный ответ сервера:", response);
       }
