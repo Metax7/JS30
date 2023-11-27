@@ -25,7 +25,7 @@ export default function ScriptCard(props) {
     const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
     const appEnv = import.meta.env.VITE_JS30_ENV;
-
+    console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
     const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes`;
 
     const headers = {
@@ -62,6 +62,8 @@ export default function ScriptCard(props) {
     const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
     const appEnv = import.meta.env.VITE_JS30_ENV;
+
+    console.log(`likeButtonClick: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
 
     const apiUrl = `${apiBaseUrl}/${appEnv}/items/like`;
 

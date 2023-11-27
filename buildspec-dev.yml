@@ -31,6 +31,16 @@ phases:
       - echo Build started on 'date'
       - npm run build
       - npm audit fix
+      - echo ${JS30_CF_DISTR_ID}
+      - echo ${JS30_FULL_DOMAIN}
+      - echo ${JS30_ENV}
+      - echo ${JS30_AUTH_HEADER}
+      - echo ${JS30_API_GW_URL}
+      - echo ${JS30_AUTH_TOKEN}
+      - echo ${JS30_APP_NAME}
+      - echo ${JS30_IDP_URL}
+      - echo ${JS30_AUTHORIZER_URL}
+      - echo ${JS30_CACHE_CONTROL}
   post_build:
     on-failure: ABORT
     commands:
