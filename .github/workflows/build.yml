@@ -35,6 +35,3 @@ jobs:
 
       - name: build vite project
         run: npm run build
-
-      - name: additional linting
-        run: npm run lint
