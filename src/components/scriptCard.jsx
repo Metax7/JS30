@@ -18,7 +18,7 @@ export default function ScriptCard(props) {
   const [loading, setLoading] = useState(false);
   const userName = "someUserId1";
 
-
+  // Here a lot of changes are required with regard of ./features/likes.jsx and client.jsx 
 
   const fetchLikes = async () => {
     setLoading(true);

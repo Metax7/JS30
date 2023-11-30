@@ -1,13 +1,7 @@
 import axios from "axios";
 
 const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
-const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
 const appEnv = import.meta.env.VITE_JS30_ENV;
-const headers = {
-    "Content-Type": "application/json",
-    [authHeader]: apiKey
-  };
 const unauthHeaders = {
     "Content-Type": "application/json"
 }
@@ -34,7 +28,7 @@ const logApiCall = (method, url, type, headers, params, body) => {
     console.log(`Method ${method} has been invoked. Url ${url} | request type ${type} | headers ${headers} | params ${params} | body ${body}`)
 }
 
-export const fetchLikesByUser = async (userId) => {
+export const fetchLikesByUser = async (userId, headers) => {
 
     const url = `${updateAndfetchUserLikesUrl}/${userId}`;
 
@@ -44,7 +38,7 @@ export const fetchLikesByUser = async (userId) => {
     return checkStatus (response);
   };
 
-export const updateLikesByUser = async (userId, likedItems) => {
+export const updateLikesByUser = async (userId, likedItems, headers) => {
 
     const url = `${updateAndfetchUserLikesUrl}/${userId}`;
     const requestBody = {
@@ -61,7 +55,7 @@ export const updateLikesByUser = async (userId, likedItems) => {
 }
 
 
-export const likeItem = async (itemId) => {
+export const likeItem = async (itemId, headers) => {
 
     logApiCall(self.name, likeUrl, "POST", headers, { "itemId" : itemId } )
 
@@ -72,7 +66,7 @@ export const likeItem = async (itemId) => {
       return checkStatus (response);
   };
 
-export const dislikeItem = async (itemId) => {
+export const dislikeItem = async (itemId, headers) => {
 
     logApiCall(self.name, dislikeUrl, "POST", headers, { "itemId" : itemId } )
 
