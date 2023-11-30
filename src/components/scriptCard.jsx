@@ -27,8 +27,9 @@ export default function ScriptCard(props) {
     const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
     const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
     const appEnv = import.meta.env.VITE_JS30_ENV;
-    console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
     const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes/${userName}`;
+
+    console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
 
     const headers = {
       "Content-Type": "application/json",
