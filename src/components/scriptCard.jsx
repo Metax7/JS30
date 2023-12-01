@@ -18,15 +18,15 @@ import {
 import { errorNotification } from "./Notifications";
 import axios from "axios";
 
-export default function ScriptCard(
-  props,
+export default function ScriptCard({  
+  card,
   userId,
   userLikes, 
   items, 
   headers, 
-  onLikeHandler, 
-  onDislikeHandler
-  ) {
+  likeHandler, 
+  dislikeHandler
+}) {
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,11 +34,11 @@ export default function ScriptCard(
   const setUpLikes = async (itemId, items, userLikes) => {
     setLoading(true);
     try {
-      console.log(`setUpLikes: itemId ${itemId} | items ${items}`)
       setLike(items.find((item) => item.ItemId === itemId.toString()).Likes)
-      if (userLikes.has(itemId.toString()))
-      setLike((prev) => prev + 1)
-      setIsLiked(true)
+      if (userLikes!==undefined && userLikes.has(itemId.toString())) {
+        setLike((prev) => prev + 1)
+        setIsLiked(true)
+      }
     }
     catch (error) {
       console.error(
@@ -52,15 +52,26 @@ export default function ScriptCard(
   }
 
   useEffect(() => {
-    setUpLikes(props.id, items, userLikes);
-  }, []);
+    const fetchData = async () => 
+    {
+      const items = await items;
+      const userLikes = await userLikes;
+      console.log(`useEffect: setUpLikes: ${card.id} ${items} ${userLikes}`) 
+      setUpLikes(card.id, items, userLikes);
+    }
+     
+    fetchData().catch(console.error)
+   
+  }, [items, userLikes]);
 
   const likeButtonClick = async (itemId) => {
+    console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`)
+    
     setLoading(true);
     if (!isLiked){
       try {
         const response = await likeItem(itemId, headers)
-        onLikeHandler(itemId)
+        likeHandler(itemId)
         const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
         setLike((prev) => prev + 1)
       }  catch (error) {
@@ -68,7 +79,7 @@ export default function ScriptCard(
           "Не удалось поставить лайк. Статус:",
           error.response || error.message || error
         );
-        onDislikeHandler(itemId)
+        dislikeHandler(itemId)
       } finally {
         setLoading(false);
       } 
@@ -77,7 +88,7 @@ export default function ScriptCard(
     else {
       try {
         const response = await dislikeItem(itemId, headers)
-        onDislikeHandler(itemId)
+        dislikeHandler(itemId)
         const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
         setLike((prev) => prev - 1)
 
@@ -86,13 +97,14 @@ export default function ScriptCard(
           "Не удалось поставить дизлайк. Статус:",
           error.response || error.message || error
         );
-        onLikeHandler(itemId)
+        likeHandler(itemId)
       } finally {
         setLoading(false);
       } 
         console.log("Лайк успешно поставлен!");
 
     }
+    console.log("AFTER")
     setIsLiked(!isLiked);
   };
 
@@ -100,15 +112,15 @@ export default function ScriptCard(
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">
       <CardHeader color="blue-gray" className="relative h-56">
-        <img src={props.cardImg} alt="card-image" className="w-full h-full" />
+        <img src={card.cardImg} alt="card-image" className="w-full h-full" />
       </CardHeader>
       <CardBody>
         <Typography variant="h5" color="blue-gray" className="mb-2">
-          {props.cardTitle}
+          {card.cardTitle}
         </Typography>
       </CardBody>
       <CardFooter className="flex items-center justify-between pt-0">
-        <Link to={props.cardLink}>
+        <Link to={card.cardLink}>
           <Button>SEE MORE</Button>
         </Link>
         <div>
@@ -119,7 +131,7 @@ export default function ScriptCard(
                 ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-blue-600"
                 : "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827]")
             }
-            onClick={()=>likeButtonClick(props.id)}
+            onClick={()=>likeButtonClick(card.id)}
           >
             <BiSolidLike />
             {loading ? (
