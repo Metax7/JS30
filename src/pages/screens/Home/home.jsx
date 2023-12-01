@@ -15,7 +15,7 @@ const userId = "someUserId1";
 export default function Home() {
   const [items, setItems] = useState([])
   const [userLikes, setUserLikes] = useState(new Set())
-  const [isAuthorized, setIsAuthorized] = useState(true) // to refactor later
+  const [isAuthorized, setIsAuthorized] = useState(TransformStreamDefaultController) // to refactor later
 
   const likeHandler = itemId => {
     setUserLikes(userLikes.add(itemId.toString()))
@@ -76,7 +76,8 @@ export default function Home() {
             items = {items} 
             headers = {headers} 
             likeHandler={likeHandler} 
-            dislikeHandler={dislikeHandler}  />;
+            dislikeHandler={dislikeHandler}
+            isAuthorized={isAuthorized}  />;
           })}
       </div>
     </div>

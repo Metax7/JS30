@@ -12,15 +12,11 @@ const likeUrl = `${stageUrl}/items/like`
 const dislikeUrl = `${stageUrl}/items/dislike`
 
 const checkStatus = response => {
-  console.log (response.status)
     if(response.status === 200) {
-      console.log("2")
         return response;
     }
-    console.log("3")
     const error = new Error(response.status)
     error.response = response
-    console.log("4")
     return Promise.reject(error)
 }
 

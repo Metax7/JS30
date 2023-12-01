@@ -15,8 +15,7 @@ import {
   dislikeItem,
   updateLikesByUser 
 } from "../client"
-import { errorNotification } from "./Notifications";
-import axios from "axios";
+import { infoNotification } from "./Notifications";
 
 export default function ScriptCard({  
   card,
@@ -25,7 +24,8 @@ export default function ScriptCard({
   items, 
   headers, 
   likeHandler, 
-  dislikeHandler
+  dislikeHandler,
+  isAuthorized
 }) {
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -52,21 +52,24 @@ export default function ScriptCard({
   }
 
   useEffect(() => {
+    
     const fetchData = async () => 
     {
-      const items = await items;
-      const userLikes = await userLikes;
-      console.log(`useEffect: setUpLikes: ${card.id} ${items} ${userLikes}`) 
-      setUpLikes(card.id, items, userLikes);
+      console.log("fetchData")
+      const items = items;
+      const userLikes = userLikes;
+      return [items, userLikes] = items, userLikes
     }
      
-    fetchData().catch(console.error)
+    fetchData().then(data => 
+      setUpLikes(card.id, data.items, data.userLikes))
+    .catch(console.error)
    
   }, [items, userLikes]);
 
   const likeButtonClick = async (itemId) => {
     console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`)
-    
+    if (!isAuthorized) return infoNotification("To like or dislike you need to be authenticated", null,4)
     setLoading(true);
     if (!isLiked){
       try {
