@@ -30,12 +30,18 @@ export default function ScriptCard({
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
+  useEffect(()=>{
+    setUpLikes(card.id, items, userLikes)
+  },[])
 
-  const setUpLikes = async (itemId, items, userLikes) => {
+  const setUpLikes = (cardId, items, userLikes) => {
     setLoading(true);
+    console.log(`CARD ID: ${cardId}`)
+    console.log(`ITEMS: ${JSON.stringify(items)}`)
+    console.log(`USERLIKES: ${JSON.stringify(userLikes)}`)
     try {
-      setLike(items.find((item) => item.ItemId === itemId.toString()).Likes)
-      if (userLikes!==undefined && userLikes.has(itemId.toString())) {
+      setLike(Number(items.find((item) => item.ItemId === cardId.toString()).Likes))
+      if (userLikes!==undefined && userLikes.has(cardId.toString())) {
         setLike((prev) => prev + 1)
         setIsLiked(true)
       }
@@ -51,21 +57,6 @@ export default function ScriptCard({
     }
   }
 
-  useEffect(() => {
-    
-    const fetchData = async () => 
-    {
-      console.log("fetchData")
-      const items = items;
-      const userLikes = userLikes;
-      return [items, userLikes] = items, userLikes
-    }
-     
-    fetchData().then(data => 
-      setUpLikes(card.id, data.items, data.userLikes))
-    .catch(console.error)
-   
-  }, [items, userLikes]);
 
   const likeButtonClick = async (itemId) => {
     console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`)
