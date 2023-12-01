@@ -10,105 +10,92 @@ import {
 import { BiSolidLike } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { PuffLoader } from "react-spinners";
+import { 
+  likeItem,
+  dislikeItem,
+  updateLikesByUser 
+} from "../client"
+import { errorNotification } from "./Notifications";
 import axios from "axios";
 
-export default function ScriptCard(props) {
+export default function ScriptCard(
+  props,
+  userId,
+  userLikes, 
+  items, 
+  headers, 
+  onLikeHandler, 
+  onDislikeHandler
+  ) {
   const [like, setLike] = useState(0);
-  const [isLike, setIsLike] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const userName = "someUserId1";
 
-  // Here a lot of changes are required with regard of ./features/likes.jsx and client.jsx 
-
-  const fetchLikes = async () => {
+  const setUpLikes = async (itemId, items, userLikes) => {
     setLoading(true);
-
-    const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-    const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
-    const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
-    const appEnv = import.meta.env.VITE_JS30_ENV;
-    const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes/${userName}`;
-
-    console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
-
-    const headers = {
-      "Content-Type": "application/json",
-      [authHeader]: apiKey
-    };
-
     try {
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data !== undefined) {
-        setLike(response.data);
-      } else {
-        console.error("Некорректный ответ сервера:", response);
-      }
-    } catch (error) {
+      console.log(`setUpLikes: itemId ${itemId} | items ${items}`)
+      setLike(items.find((item) => item.ItemId === itemId.toString()).Likes)
+      if (userLikes.has(itemId.toString()))
+      setLike((prev) => prev + 1)
+      setIsLiked(true)
+    }
+    catch (error) {
       console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-    } finally {
+              "Ошибка во время запроса:",
+              error.response || error.message || error
+            );
+    }
+    finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
-    fetchLikes();
+    setUpLikes(props.id, items, userLikes);
   }, []);
 
-  const likeButtonClick = async () => {
+  const likeButtonClick = async (itemId) => {
     setLoading(true);
-
-    const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-    const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
-    const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
-    const appEnv = import.meta.env.VITE_JS30_ENV;
-
-    console.log(`likeButtonClick: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
-
-    const apiUrl = `${apiBaseUrl}/${appEnv}/items/like`;
-
-    const headers = {
-      "Content-Type": "application/json",
-      [authHeader]: apiKey,
-    };
-
-    const requestBody = {
-      username: userName,
-    };
-
-    try {
-      const response = await axios.post(apiUrl, requestBody, {
-        headers,
-        params: { ItemId: props.id.toString() },
-      });
-
-      if (
-        response &&
-        response.status &&
-        response.status >= 200 &&
-        response.status < 300
-      ) {
-        console.log("Лайк успешно поставлен!");
-        setLike((prevLike) => prevLike + (isLike ? -1 : 1));
-        setIsLike(!isLike);
-      } else {
+    if (!isLiked){
+      try {
+        const response = await likeItem(itemId, headers)
+        onLikeHandler(itemId)
+        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        setLike((prev) => prev + 1)
+      }  catch (error) {
         console.error(
           "Не удалось поставить лайк. Статус:",
-          response && response.status
+          error.response || error.message || error
         );
-      }
-    } catch (error) {
-      console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-    } finally {
-      setLoading(false);
+        onDislikeHandler(itemId)
+      } finally {
+        setLoading(false);
+      } 
+        console.log("Лайк успешно поставлен!");
     }
+    else {
+      try {
+        const response = await dislikeItem(itemId, headers)
+        onDislikeHandler(itemId)
+        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        setLike((prev) => prev - 1)
+
+      }  catch (error) {
+        console.error(
+          "Не удалось поставить дизлайк. Статус:",
+          error.response || error.message || error
+        );
+        onLikeHandler(itemId)
+      } finally {
+        setLoading(false);
+      } 
+        console.log("Лайк успешно поставлен!");
+
+    }
+    setIsLiked(!isLiked);
   };
+
 
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">
@@ -128,11 +115,11 @@ export default function ScriptCard(props) {
           <button
             className={
               "" +
-              (isLike
+              (isLiked
                 ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-blue-600"
                 : "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827]")
             }
-            onClick={likeButtonClick}
+            onClick={()=>likeButtonClick(props.id)}
           >
             <BiSolidLike />
             {loading ? (
