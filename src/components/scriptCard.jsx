@@ -10,129 +10,122 @@ import {
 import { BiSolidLike } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { PuffLoader } from "react-spinners";
-import axios from "axios";
+import { 
+  likeItem,
+  dislikeItem,
+  updateLikesByUser 
+} from "../client"
+import { infoNotification } from "./Notifications";
 
-export default function ScriptCard(props) {
+export default function ScriptCard({  
+  card,
+  userId,
+  userLikes, 
+  items, 
+  headers, 
+  likeHandler, 
+  dislikeHandler,
+  isAuthorized
+}) {
   const [like, setLike] = useState(0);
-  const [isLike, setIsLike] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const userName = "someUserId1";
+  useEffect(()=>{
+    setUpLikes(card.id, items, userLikes)
+  },[])
 
-  // Here a lot of changes are required with regard of ./features/likes.jsx and client.jsx 
-
-  const fetchLikes = async () => {
+  const setUpLikes = (cardId, items, userLikes) => {
     setLoading(true);
-
-    const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-    const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
-    const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
-    const appEnv = import.meta.env.VITE_JS30_ENV;
-    const apiUrl = `${apiBaseUrl}/${appEnv}/userlikes/${userName}`;
-
-    console.log(`fetchLikes: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
-
-    const headers = {
-      "Content-Type": "application/json",
-      [authHeader]: apiKey
-    };
-
+    console.log(`CARD ID: ${cardId}`)
+    console.log(`ITEMS: ${JSON.stringify(items)}`)
+    console.log(`USERLIKES: ${JSON.stringify(userLikes)}`)
     try {
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data !== undefined) {
-        setLike(response.data);
-      } else {
-        console.error("Некорректный ответ сервера:", response);
+      setLike(Number(items.find((item) => item.ItemId === cardId.toString()).Likes))
+      if (userLikes!==undefined && userLikes.has(cardId.toString())) {
+        setLike((prev) => prev + 1)
+        setIsLiked(true)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-    } finally {
+              "Ошибка во время запроса:",
+              error.response || error.message || error
+            );
+    }
+    finally {
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
-    fetchLikes();
-  }, []);
 
-  const likeButtonClick = async () => {
+  const likeButtonClick = async (itemId) => {
+    console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`)
+    if (!isAuthorized) return infoNotification("To like or dislike you need to be authenticated", null,4)
     setLoading(true);
-
-    const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-    const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
-    const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
-    const appEnv = import.meta.env.VITE_JS30_ENV;
-
-    console.log(`likeButtonClick: apiBaseUrl ${apiBaseUrl}, apiKey ${apiKey}, authHeader ${authHeader}, appEnv ${appEnv}`)
-
-    const apiUrl = `${apiBaseUrl}/${appEnv}/items/like`;
-
-    const headers = {
-      "Content-Type": "application/json",
-      [authHeader]: apiKey,
-    };
-
-    const requestBody = {
-      username: userName,
-    };
-
-    try {
-      const response = await axios.post(apiUrl, requestBody, {
-        headers,
-        params: { ItemId: props.id.toString() },
-      });
-
-      if (
-        response &&
-        response.status &&
-        response.status >= 200 &&
-        response.status < 300
-      ) {
-        console.log("Лайк успешно поставлен!");
-        setLike((prevLike) => prevLike + (isLike ? -1 : 1));
-        setIsLike(!isLike);
-      } else {
+    if (!isLiked){
+      try {
+        const response = await likeItem(itemId, headers)
+        likeHandler(itemId)
+        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        setLike((prev) => prev + 1)
+      }  catch (error) {
         console.error(
           "Не удалось поставить лайк. Статус:",
-          response && response.status
+          error.response || error.message || error
         );
-      }
-    } catch (error) {
-      console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-    } finally {
-      setLoading(false);
+        dislikeHandler(itemId)
+      } finally {
+        setLoading(false);
+      } 
+        console.log("Лайк успешно поставлен!");
     }
+    else {
+      try {
+        const response = await dislikeItem(itemId, headers)
+        dislikeHandler(itemId)
+        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        setLike((prev) => prev - 1)
+
+      }  catch (error) {
+        console.error(
+          "Не удалось поставить дизлайк. Статус:",
+          error.response || error.message || error
+        );
+        likeHandler(itemId)
+      } finally {
+        setLoading(false);
+      } 
+        console.log("Лайк успешно поставлен!");
+
+    }
+    console.log("AFTER")
+    setIsLiked(!isLiked);
   };
+
 
   return (
     <Card className="mt-6 shadow-2xl bg-slate-300 hover:scale-95 transition-all duration-200">
       <CardHeader color="blue-gray" className="relative h-56">
-        <img src={props.cardImg} alt="card-image" className="w-full h-full" />
+        <img src={card.cardImg} alt="card-image" className="w-full h-full" />
       </CardHeader>
       <CardBody>
         <Typography variant="h5" color="blue-gray" className="mb-2">
-          {props.cardTitle}
+          {card.cardTitle}
         </Typography>
       </CardBody>
       <CardFooter className="flex items-center justify-between pt-0">
-        <Link to={props.cardLink}>
+        <Link to={card.cardLink}>
           <Button>SEE MORE</Button>
         </Link>
         <div>
           <button
             className={
               "" +
-              (isLike
+              (isLiked
                 ? "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827] text-blue-600"
                 : "flex items-center border font-bold rounded-md p-2 space-x-2 border-[#111827]")
             }
-            onClick={likeButtonClick}
+            onClick={()=>likeButtonClick(card.id)}
           >
             <BiSolidLike />
             {loading ? (
