@@ -34,7 +34,7 @@ phases:
       - echo "JS30_CF_DISTR_ID ${JS30_CF_DISTR_ID}"
       - echo "JS30_FULL_DOMAIN ${JS30_FULL_DOMAIN}"
       - echo "JS30_ENV ${JS30_ENV}"
-      - echo "JS30_AUTH_HEADER ${JS30_AUTH_HEADER}""
+      - echo "JS30_AUTH_HEADER ${JS30_AUTH_HEADER}"
       - echo "JS30_API_GW_URL ${JS30_API_GW_URL}"
       - echo "JS30_API_GW_URL ${JS30_AUTH_TOKEN}"
       - echo "JS30_APP_NAME ${JS30_APP_NAME}"
