@@ -13,58 +13,59 @@ const headers = {
 const userId = "someUserId1";
 
 export default function Home() {
-  const [items, setItems] = useState([])
-  const [userLikes, setUserLikes] = useState(new Set())
+  const [items, setItems] = useState(null)
+  const [userLikes, setUserLikes] = useState(null)
   const [isAuthorized, setIsAuthorized] = useState(true) // to refactor later
   
   const likeHandler = itemId => {
+    console.log(`likeHandler, userlikes ${userLikes}, itemId ${itemId.toString()}`)
     setUserLikes(userLikes.add(itemId.toString()))
   };
   const dislikeHandler = itemId => {
     setUserLikes(userLikes.delete(itemId.toString()))
   };
 
-  const fetchAll = async () => {
-    try {
-      const response = await fetchAllItemsAndLikes();
-      console.log(response)
-      if (response !== undefined && response.data !== undefined && response.data.Items !== undefined) {
-        console.log(response.data.Items)
-        setItems(new Set(response.data.Items))
-      }
-    } 
-    catch (error) {
-      console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-      errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
-    }
-  }
-
-  const fetchUserLikes = async () => {
-    try {
-      const response = await fetchLikesByUser(userId,headers)
-      if (response !== undefined && response.data !== undefined) {
-        console.log(new Set(response.data))
-        setUserLikes(new Set(response.data))
-      }
-    } 
-    catch (error) {
-      console.error(
-        "Ошибка во время запроса:",
-        error.response || error.message || error
-      );
-      errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
-    }
-  }
-  
 
 
   useEffect( () => {
-     fetchAll();
+   let active = true;
+const fetchAll = async () => {
+  try {
+    const response = await fetchAllItemsAndLikes();
+    console.log(response)
+    if (active && response !== undefined && response.data !== undefined && response.data.Items !== undefined) {
+      console.log(Array.from(response.data.Items))
+      setItems(response.data.Items)
+    }
+  } 
+  catch (error) {
+    console.error(
+      "Ошибка во время запроса:",
+      error.response || error.message || error
+    );
+    errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
+  }
+}
+    fetchAll();
     if(isAuthorized){
-      fetchUserLikes();
+      const fetchUserLikes = async () => {
+        try {
+        const response = await fetchLikesByUser(userId,headers)
+          if (active && response !== undefined && response.data !== undefined) {
+            console.log(new Set(response.data))
+            setUserLikes(new Set(response.data))
+          }
+            }  
+            catch (error) {
+              console.error(
+                "Ошибка во время запроса:",
+                error.response || error.message || error);
+                errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
+              }}
+      fetchUserLikes()
+    }
+    return () => {
+      active = true;
     }
   }, []);
       

@@ -36,7 +36,7 @@ export const fetchLikesByUser = async (userId, headers) => {
 
 export const updateLikesByUser = async (userId, likedItems, headers) => {
 
-    const url = `${updateAndfetchUserLikesUrl}/${userId}`;
+    const url = `${updateAndfetchUserLikesUrl}`;
     const requestBody = {
         userId : userId,
         likedItems: likedItems

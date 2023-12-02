@@ -37,26 +37,27 @@ export default function ScriptCard({
   const setUpLikes = (cardId, items, userLikes) => {
     setLoading(true);
     console.log(`CARD ID: ${cardId}`)
-    console.log(`ITEMS: ${JSON.stringify(items)}`)
-    console.log(`USERLIKES: ${JSON.stringify(userLikes)}`)
+    console.log(`ITEMS: ${JSON.stringify(Array.from(items))}`)
+    console.log(`USERLIKES: ${JSON.stringify(Array.from(userLikes))}`)
     try {
-      setLike(Number(items.find((item) => item.ItemId === cardId.toString()).Likes))
-      if (userLikes!==undefined && userLikes.has(cardId.toString())) {
+      const itemArray = Array.from(items);
+      const userLikesArray = Array.from(userLikes);
+
+      setLike(Number(itemArray.find((item) => item.ItemId === cardId.toString()).Likes));
+
+      if (userLikesArray !== undefined && userLikesArray.includes(cardId.toString())) {
         setLike((prev) => prev + 1)
         setIsLiked(true)
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error(
-              "Ошибка во время запроса:",
-              error.response || error.message || error
-            );
-    }
-    finally {
+        "Ошибка во время запроса:",
+        error.response || error.message || error
+      );
+    } finally {
       setLoading(false);
     }
-  }
-
+}
 
   const likeButtonClick = async (itemId) => {
     console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`)
@@ -66,7 +67,7 @@ export default function ScriptCard({
       try {
         const response = await likeItem(itemId, headers)
         likeHandler(itemId)
-        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        const responseOfUpdate = await updateLikesByUser(userId, Array.from(userLikes), headers)
         setLike((prev) => prev + 1)
       }  catch (error) {
         console.error(
@@ -83,7 +84,7 @@ export default function ScriptCard({
       try {
         const response = await dislikeItem(itemId, headers)
         dislikeHandler(itemId)
-        const responseOfUpdate = await updateLikesByUser(userId, userLikes, headers)
+        const responseOfUpdate = await updateLikesByUser(userId, Array.from(userLikes), headers)
         setLike((prev) => prev - 1)
 
       }  catch (error) {
