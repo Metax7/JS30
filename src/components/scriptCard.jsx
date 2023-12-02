@@ -7,9 +7,7 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-// import { BiSolidLike } from "react-icons/bi";
 import { useEffect, useState } from "react";
-// import { PuffLoader } from "react-spinners";
 import { likeItem, dislikeItem, updateLikesByUser } from "../client";
 import { infoNotification } from "./Notifications";
 import LikeButton from "./likeButton";
