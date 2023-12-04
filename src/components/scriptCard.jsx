@@ -31,9 +31,6 @@ export default function ScriptCard({
 
   const setUpLikes = (cardId, likeCounter, userLikes) => {
     setLoading(true);
-    console.log(`CARD ID: ${cardId}`);
-    console.log(`LIKECOUNTER: ${likeCounter}`);
-    console.log(`USERLIKES: ${JSON.stringify(Array.from(userLikes))}`);
     try {
 
       const userLikesArray = Array.from(userLikes);
@@ -56,7 +53,6 @@ export default function ScriptCard({
   };
 
   const likeButtonClick = async (itemId) => {
-    console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`);
     if (!isAuthorized)
       return infoNotification(
         "To like or dislike you need to be authenticated",
@@ -105,7 +101,6 @@ export default function ScriptCard({
       }
       console.log("Дизлайк успешно поставлен!");
     }
-    console.log("AFTER");
     setIsLiked(!isLiked);
   };
 
