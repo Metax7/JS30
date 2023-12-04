@@ -33,8 +33,7 @@ const fetchAll = async () => {
     const response = await fetchAllItemsAndLikes();
     console.log(response)
     if (active && response !== undefined && response.data !== undefined && response.data.Items !== undefined) {
-      console.log(Array.from(response.data.Items))
-      setItems(response.data.Items)
+      setItems(Array.from(response.data.Items))
     }
   } 
   catch (error) {
@@ -79,7 +78,7 @@ const fetchUserLikes = async () => {
             card = {card} 
             userId = {userId} 
             userLikes = {userLikes}
-            items = {items} 
+            likeCounter = {Number(items.find((item) => item.ItemId === card.id.toString()).Likes)} 
             headers = {headers} 
             likeHandler={likeHandler} 
             dislikeHandler={dislikeHandler}
