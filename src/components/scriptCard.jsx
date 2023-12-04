@@ -51,8 +51,9 @@ export default function ScriptCard({
       setLoading(false);
     }
   };
-
+// just triggering pipeline
   const likeButtonClick = async (itemId) => {
+
     if (!isAuthorized)
       return infoNotification(
         "To like or dislike you need to be authenticated",
