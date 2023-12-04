@@ -16,7 +16,7 @@ export default function ScriptCard({
   card,
   userId,
   userLikes,
-  items,
+  likeCounter,
   headers,
   likeHandler,
   dislikeHandler,
@@ -26,29 +26,22 @@ export default function ScriptCard({
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setUpLikes(card.id, items, userLikes);
+    setUpLikes(card.id, likeCounter, userLikes);
   }, []);
 
-  const setUpLikes = (cardId, items, userLikes) => {
+  const setUpLikes = (cardId, likeCounter, userLikes) => {
     setLoading(true);
-    console.log(`CARD ID: ${cardId}`);
-    console.log(`ITEMS: ${JSON.stringify(Array.from(items))}`);
-    console.log(`USERLIKES: ${JSON.stringify(Array.from(userLikes))}`);
     try {
-      const itemArray = Array.from(items);
-      const userLikesArray = Array.from(userLikes);
 
-      setLike(
-        Number(
-          itemArray.find((item) => item.ItemId === cardId.toString()).Likes
-        )
-      );
+
+      const userLikesArray = Array.from(userLikes);
+      setLike(likeCounter);
+
 
       if (
         userLikesArray !== undefined &&
         userLikesArray.includes(cardId.toString())
       ) {
-        setLike((prev) => prev + 1);
         setIsLiked(true);
       }
     } catch (error) {
@@ -62,7 +55,6 @@ export default function ScriptCard({
   };
 
   const likeButtonClick = async (itemId) => {
-    console.log(`BEFORE HEADERS ${headers} itemId ${itemId}`);
     if (!isAuthorized)
       return infoNotification(
         "To like or dislike you need to be authenticated",
@@ -109,9 +101,9 @@ export default function ScriptCard({
       } finally {
         setLoading(false);
       }
-      console.log("Лайк успешно поставлен!");
+      console.log("Дизлайк успешно поставлен!");
     }
-    console.log("AFTER");
+
     setIsLiked(!isLiked);
   };
 

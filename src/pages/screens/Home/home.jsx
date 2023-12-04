@@ -18,23 +18,21 @@ export default function Home() {
   const [isAuthorized, setIsAuthorized] = useState(true) // to refactor later
   
   const likeHandler = itemId => {
-    console.log(`likeHandler, userlikes ${userLikes}, itemId ${itemId.toString()}`)
-    setUserLikes(userLikes.add(itemId.toString()))
+    userLikes.add(itemId.toString())
   };
   const dislikeHandler = itemId => {
-    setUserLikes(userLikes.delete(itemId.toString()))
+      userLikes.delete(itemId.toString());
   };
 
 
 
   useEffect( () => {
-   let active = true;
+   
 const fetchAll = async () => {
   try {
     const response = await fetchAllItemsAndLikes();
     console.log(response)
     if (active && response !== undefined && response.data !== undefined && response.data.Items !== undefined) {
-      console.log(Array.from(response.data.Items))
       setItems(response.data.Items)
     }
   } 
@@ -46,26 +44,28 @@ const fetchAll = async () => {
     errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
   }
 }
-    fetchAll();
-    if(isAuthorized){
-      const fetchUserLikes = async () => {
-        try {
-        const response = await fetchLikesByUser(userId,headers)
-          if (active && response !== undefined && response.data !== undefined) {
-            console.log(new Set(response.data))
-            setUserLikes(new Set(response.data))
-          }
-            }  
-            catch (error) {
-              console.error(
-                "Ошибка во время запроса:",
-                error.response || error.message || error);
-                errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
-              }}
+const fetchUserLikes = async () => {
+  try {
+  const response = await fetchLikesByUser(userId,headers)
+    if (active && response !== undefined && response.data !== undefined) {
+      console.log(new Set(response.data))
+      setUserLikes(new Set(response.data))
+    }
+      }  
+      catch (error) {
+        console.error(
+          "Ошибка во время запроса:",
+          error.response || error.message || error)
+          errorNotification(`Errow while requesting data`, `${error.message} ${error.stack}`,10, 'bottomLeft')
+        }
+      }
+    let active = true
+    fetchAll()
+    if(isAuthorized) {
       fetchUserLikes()
     }
     return () => {
-      active = true;
+      active = false
     }
   }, []);
       
@@ -78,7 +78,7 @@ const fetchAll = async () => {
             card = {card} 
             userId = {userId} 
             userLikes = {userLikes}
-            items = {items} 
+            likeCounter = {Number(items.find((item) => item.ItemId === card.id.toString()).Likes)} 
             headers = {headers} 
             likeHandler={likeHandler} 
             dislikeHandler={dislikeHandler}
