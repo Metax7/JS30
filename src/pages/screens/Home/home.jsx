@@ -65,9 +65,6 @@ const fetchUserLikes = async () => {
     if(isAuthorized) {
       fetchUserLikes()
     }
-     
-      
-    
     return () => {
       active = false
     }
