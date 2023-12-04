@@ -27,7 +27,7 @@ export default function ScriptCard({
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setUpLikes(card.id, likeCounter, userLikes);
-  }, [likeCounter]);
+  }, []);
 
   const setUpLikes = (cardId, likeCounter, userLikes) => {
     setLoading(true);
@@ -43,8 +43,6 @@ export default function ScriptCard({
         userLikesArray !== undefined &&
         userLikesArray.includes(cardId.toString())
       ) {
-        setLike((prev) => prev + 1);
-        console.log('SET LIKE PREV=>' + like)
         setIsLiked(true);
       }
     } catch (error) {

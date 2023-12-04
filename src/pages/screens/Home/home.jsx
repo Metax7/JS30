@@ -18,10 +18,10 @@ export default function Home() {
   const [isAuthorized, setIsAuthorized] = useState(true) // to refactor later
   
   const likeHandler = itemId => {
-    setUserLikes(userLikes.add(itemId.toString()))
+    userLikes.add(itemId.toString())
   };
   const dislikeHandler = itemId => {
-    setUserLikes(userLikes.delete(itemId.toString()))
+      userLikes.delete(itemId.toString());
   };
 
 
@@ -33,7 +33,7 @@ const fetchAll = async () => {
     const response = await fetchAllItemsAndLikes();
     console.log(response)
     if (active && response !== undefined && response.data !== undefined && response.data.Items !== undefined) {
-      setItems(Array.from(response.data.Items))
+      setItems(response.data.Items)
     }
   } 
   catch (error) {
