@@ -33,8 +33,10 @@ export default function ScriptCard({
     setLoading(true);
     try {
 
+
       const userLikesArray = Array.from(userLikes);
       setLike(likeCounter);
+
 
       if (
         userLikesArray !== undefined &&
@@ -51,9 +53,8 @@ export default function ScriptCard({
       setLoading(false);
     }
   };
-// just triggering pipeline
-  const likeButtonClick = async (itemId) => {
 
+  const likeButtonClick = async (itemId) => {
     if (!isAuthorized)
       return infoNotification(
         "To like or dislike you need to be authenticated",
@@ -102,6 +103,7 @@ export default function ScriptCard({
       }
       console.log("Дизлайк успешно поставлен!");
     }
+
     setIsLiked(!isLiked);
   };
 
