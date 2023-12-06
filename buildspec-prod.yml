@@ -14,7 +14,7 @@ env:
     JS30_IDP_URL: "/sandbox/metax7/js30/prod/JS30_IDP_URL"
     JS30_AUTHORIZER_URL: "/sandbox/metax7/js30/prod/JS30_AUTHORIZER_URL"
     JS30_CACHE_CONTROL: "/sandbox/metax7/js30/prod/JS30_CACHE_CONTROL"
-
+    JS30_IDP_CLIENT_ID: "/sandbox/metax7/js30/prod/JS30_IDP_CLIENT_ID"
 phases:
   install:
     on-failure: ABORT
@@ -41,6 +41,7 @@ phases:
       - echo "JS30_IDP_URL ${JS30_IDP_URL}"
       - echo "JS30_AUTHORIZER_URL ${JS30_AUTHORIZER_URL}"
       - echo "JS30_CACHE_CONTROL ${JS30_CACHE_CONTROL}"
+      - echo " JS30_IDP_CLIENT_ID {JS30_IDP_CLIENT_ID}"
   post_build:
     on-failure: ABORT
     commands:

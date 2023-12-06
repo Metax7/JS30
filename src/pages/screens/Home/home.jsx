@@ -4,11 +4,11 @@ import { fetchAllItemsAndLikes, fetchLikesByUser } from "../../../client";
 import { errorNotification } from "../../../components/Notifications";
 import { useEffect, useState } from "react";
 
-const apiKey = import.meta.env.VITE_JS30_AUTH_TOKEN;
+const authToken = import.meta.env.VITE_JS30_AUTH_TOKEN;
 const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
 const headers = {
     "Content-Type": "application/json",
-    [authHeader]: apiKey
+    [authHeader]: authToken
   };
 const userId = "someUserId1";
 
