@@ -11,7 +11,7 @@ export const getOpenSamlUrl = (
     redirectUri,
     scope,
     state,
-    code_challenge) => {
+    codeChallenge) => {
 // https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html
 // FIXME: add STATE ,                           code_challenge_method=S256&code_challenge=CODE_CHALLENGE
 const authorizeUrlSuffix =  '/oauth2/authorize'
@@ -24,10 +24,9 @@ params.append("scope", scope)
 if (state !== undefined && state!== null) {
     params.append("STATE", state)
 }
-if (codeChallengeMethod !== undefined && code_challenge !== undefined 
-    && codeChallengeMethod !== null && code_challenge !== null) {
+if (codeChallenge !== undefined && codeChallenge !== null) {
         params.append("code_challenge_method", codeChallengeMethod)
-        params.append("code_challenge", code_challenge)
+        params.append("code_challenge", codeChallenge)
     }
 
 
