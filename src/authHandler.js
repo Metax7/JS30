@@ -3,6 +3,7 @@ import { getOAuth, postOAuth } from "./client";
 const tokenUrlSuffix = '/oauth2/token'  
 const infoUrlSuffix = '/oauth2/userInfo'
 const oauth2Headers = {'Content-Type':'application/x-www-form-urlencoded'}
+const code_challenge_method = 'S256'
 
 export const getOpenSamlUrl = (
     IdentityProvider,
@@ -10,8 +11,7 @@ export const getOpenSamlUrl = (
     redirectUri,
     scope,
     state,
-    code_challenge,
-    code_challenge_method) => {
+    code_challenge) => {
 // https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html
 // FIXME: add STATE ,                           code_challenge_method=S256&code_challenge=CODE_CHALLENGE
 const authorizeUrlSuffix =  '/oauth2/authorize'
@@ -72,4 +72,10 @@ export const getUserInfo = async (token) => {
 
 export const extractCode = responseUrl => {
     // TODO: Write extracter
+    return "NOT IMPLEMENTED YET"
+}
+
+export const getChallengePKCE = () => {
+    // TODO: Implement
+    return "get Challenge NOT IMPLEMENTED YET"
 }
