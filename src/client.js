@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
-const appEnv = import.meta.env.VITE_JS30_ENV;
+const cognitoHost = import.meta.env.VITE_JS30_AUTHORIZER_URL
+const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL
+const appEnv = import.meta.env.VITE_JS30_ENV
 const unauthHeaders = {
     "Content-Type": "application/json"
 }
@@ -13,7 +14,7 @@ const dislikeUrl = `${stageUrl}/items/dislike`
 
 const checkStatus = response => {
     if(response.status === 200) {
-        return response;
+        return response
     }
     const error = new Error(response.status)
     error.response = response
@@ -21,22 +22,23 @@ const checkStatus = response => {
 }
 
 const logApiCall = (name, url, type, headers, params, body) => {
-    console.log(`Method ${name} has been invoked. Url ${url} | request type ${type} | headers ${JSON.stringify(headers)} | params ${JSON.stringify(params)} | body ${JSON.stringify(body)}`)
+    console.log(`Method ${name} has been invoked. Url ${url} | request type ${type} |
+    headers ${JSON.stringify(headers)} | params ${JSON.stringify(params)} | body ${JSON.stringify(body)}`)
 }
 
 export const fetchLikesByUser = async (userId, headers) => {
 
-    const url = `${updateAndfetchUserLikesUrl}/${userId}`;
+    const url = `${updateAndfetchUserLikesUrl}/${userId}`
 
     logApiCall("fetchLikesByUser", url, "GET", headers)
 
-    const response = await axios.get(url, { headers });
-    return checkStatus (response);
+    const response = await axios.get(url, { headers })
+    return checkStatus (response)
   };
 
 export const updateLikesByUser = async (userId, likedItems, headers) => {
 
-    const url = `${updateAndfetchUserLikesUrl}`;
+    const url = `${updateAndfetchUserLikesUrl}`
     const requestBody = {
         userId : userId,
         likedItems: likedItems
@@ -49,7 +51,7 @@ export const updateLikesByUser = async (userId, likedItems, headers) => {
       requestBody,
       {headers}
       )
-    return checkStatus (response);
+    return checkStatus (response)
 }
 
 
@@ -64,7 +66,7 @@ export const likeItem = async (itemId, headers) => {
         headers,
         params: { itemId : itemId }
       });
-      return checkStatus (response);
+      return checkStatus (response)
   };
 
 export const dislikeItem = async (itemId, headers) => {
@@ -81,10 +83,31 @@ export const dislikeItem = async (itemId, headers) => {
 };
 
 export const fetchAllItemsAndLikes = async () => {
-    const url = `${fetchAllLikesUrl}`;
+    const url = `${fetchAllLikesUrl}`
 
     logApiCall("fetchAllItemsAndLikes", url, "GET", unauthHeaders)
 
     const response = await axios.get(url, {unauthHeaders});
-    return checkStatus (response);
+    return checkStatus (response)
+}
+
+export const getOAuth = async (urlSuffix, params) =>  {
+
+  const url = `${cognitoHost}${urlSuffix}`
+
+  logApiCall("getOAuth", url, "GET", null, params)
+
+  const response = await axios.get(url, {params})
+return checkStatus(response)
+}
+
+export const postOAuth = async (urlSuffix, headers, requestBody) => { 
+  const url = `${cognitoHost}${urlSuffix}`
+  
+  logApiCall("postOAuth", url, "POST", headers, null, requestBody)
+
+  const response = await axios.post(url, requestBody, {headers}
+    )
+    return checkStatus(response)
+  
 }
