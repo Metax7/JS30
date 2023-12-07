@@ -1,8 +1,9 @@
-import { getOAuth, postOAuth } from "./client";
+import { getOAuth, postOAuth } from './client'
 
-const tokenUrlSuffix = '/oauth2/token'  
+const tokenUrlSuffix = '/oauth2/token'
 const infoUrlSuffix = '/oauth2/userInfo'
-const oauth2Headers = {'Content-Type':'application/x-www-form-urlencoded'}
+const oauth2Headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+const codeChallengeMethod = 'S256'
 
 export const getOpenSamlUrl = (
     IdentityProvider,
@@ -10,8 +11,7 @@ export const getOpenSamlUrl = (
     redirectUri,
     scope,
     state,
-    code_challenge,
-    code_challenge_method) => {
+    code_challenge) => {
 // https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html
 // FIXME: add STATE ,                           code_challenge_method=S256&code_challenge=CODE_CHALLENGE
 const authorizeUrlSuffix =  '/oauth2/authorize'
@@ -24,9 +24,9 @@ params.append("scope", scope)
 if (state !== undefined && state!== null) {
     params.append("STATE", state)
 }
-if (code_challenge_method !== undefined && code_challenge !== undefined 
-    && code_challenge_method !== null && code_challenge !== null) {
-        params.append("code_challenge_method", code_challenge_method)
+if (codeChallengeMethod !== undefined && code_challenge !== undefined 
+    && codeChallengeMethod !== null && code_challenge !== null) {
+        params.append("code_challenge_method", codeChallengeMethod)
         params.append("code_challenge", code_challenge)
     }
 
@@ -40,16 +40,16 @@ getOAuth(authorizeUrlSuffix, params)
 export const xChange = async (
     clientId,
     authorization_code,
-    redirect_uri,
-    code_verifier) => {
+    redirectUri,
+    codeVerifier) => {
     const body = {}
     body.append('grant_type','authorization_code')
     body.append('client_id', clientId)
     body.append('code', authorization_code)
-    body.append('redirect_uri', redirect_uri)
+    body.append('redirect_uri', redirectUri)
 
-    if(code_verifier!==undefined && code_verifier!==null) {
-        body.append('code_verifier', code_verifier)
+    if(codeVerifier!==undefined && codeVerifier!==null) {
+        body.append('code_verifier', codeVerifier)
     }
     postOAuth(tokenUrlSuffix, oauth2Headers, body)
 }
@@ -72,4 +72,10 @@ export const getUserInfo = async (token) => {
 
 export const extractCode = responseUrl => {
     // TODO: Write extracter
+    return "NOT IMPLEMENTED YET"
+}
+
+export const getChallengePKCE = () => {
+    // TODO: Implement
+    return "get Challenge NOT IMPLEMENTED YET"
 }
