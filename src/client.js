@@ -1,5 +1,6 @@
 import axios from "axios";
 
+const cognitoHost = import.meta.env.VITE_JS30_AUTHORIZER_URL
 const apiBaseUrl = import.meta.env.VITE_JS30_API_GW_URL;
 const appEnv = import.meta.env.VITE_JS30_ENV;
 const unauthHeaders = {
@@ -87,4 +88,25 @@ export const fetchAllItemsAndLikes = async () => {
 
     const response = await axios.get(url, {unauthHeaders});
     return checkStatus (response);
+}
+
+export const getOAuth = async (urlSuffix, params) =>  {
+
+  const url = `${cognitoHost}${urlSuffix}`
+
+  logApiCall("getOAuth", url, "GET", null, params)
+
+  const response = await axios.get(url, {params})
+return checkStatus(response)
+}
+
+export const postOAuth = async (urlSuffix, headers, requestBody) => { 
+  const url = `${cognitoHost}${urlSuffix}`
+  
+  logApiCall("postOAuth", url, "POST", headers, null, requestBody)
+
+  const response = await axios.post(url, requestBody, {headers}
+    )
+    return checkStatus(response)
+  
 }
