@@ -52,10 +52,10 @@ getOAuth(authorizeUrlSuffix, params)
 }
 /**
  * 
- * @param {*} clientId - id of Application Client registered in Cognito Userpool
- * @param {*} authorizationCode - code of grant_type to be exchanged to Authorization Token
- * @param {*} redirectUri - Must be the same redirect_uri that was used to get authorization_code in /oauth2/authorize.
- * @param {*} codeVerifier - The proof key. Required if the authorization code was requested with PKCE.
+ * @param {string} clientId - id of Application Client registered in Cognito Userpool
+ * @param {string} authorizationCode - code of grant_type to be exchanged to Authorization Token
+ * @param {string} redirectUri - Must be the same redirect_uri that was used to get authorization_code in /oauth2/authorize.
+ * @param {string} codeVerifier - The proof key. Required if the authorization code was requested with PKCE.
  * 
  * @returns {string}  {
                         "access_token":"eyJra1example", 
@@ -84,8 +84,8 @@ export const xChange = async (
 
 /**
  * 
- * @param {*} clientId - id of Application Client registered in Cognito Userpool
- * @param {*} refreshToken - refresh_token to be refresh acced and it_token pair.
+ * @param {string} clientId - id of Application Client registered in Cognito Userpool
+ * @param {string} refreshToken - refresh_token to be refresh acced and it_token pair.
  * 
  * @returns {object} { 
                         "access_token":"eyJra1example", 
