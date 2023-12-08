@@ -29,6 +29,7 @@ export default function Home() {
   useEffect( () => {
    
 const fetchAll = async () => {
+
   try {
     const response = await fetchAllItemsAndLikes();
     console.log(response)
@@ -45,6 +46,7 @@ const fetchAll = async () => {
   }
 }
 const fetchUserLikes = async () => {
+
   try {
   const response = await fetchLikesByUser(userId,headers)
     if (active && response !== undefined && response.data !== undefined) {
