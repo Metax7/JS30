@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/react,visualstudiocode,yarn
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,visualstudiocode,yarn
 
-localstart.sh
+localboot.env
 ### react ###
 .DS_*
 *.log
