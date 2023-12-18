@@ -133,6 +133,7 @@ export const getUserInfo = async (accessToken) => {
 
 /**
  * extract Autorization Code from callback uri
+ * @todo - Implement this method to extract authentication code form the url
  * @param {string} responseUrl 
  * @returns {string} - Authorization Code that is intended to be exchanged to access-, refresh, and id-tokens 
  */
