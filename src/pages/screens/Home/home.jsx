@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 const authToken = import.meta.env.VITE_JS30_AUTH_TOKEN;
 const authHeader = import.meta.env.VITE_JS30_AUTH_HEADER;
 const headers = {
-  "Content-Type": "application/json",
-  [authHeader]: authToken,
-};
+    "Content-Type": "application/json",
+    [authHeader]: authToken
+  };
 const userId = "someUserId1";
 
 export default function Home() {

@@ -16,11 +16,14 @@ import {
 } from "../../authHandler"
 /**
  * Sign in with Google Account
+ *  @see https://docs.aws.amazon.com/cognito/latest/developerguide/user-pools-API-operations.html
+ *  @see https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
  *  @returns {object} userData conisting of {string} idToken and {string} userId
- * 
+ *  
  */
 const signInWithGoogle = () => {
   const authUrl = getOpenSamlUrl(IdP,clientId,redirectUri,IdPScope)
+  //TODO: don't forget to impement the mehtod down below
   const auth_code = extractCode(authUrl)
   const authData = xChange(clientId,auth_code,redirectUri)
   const idToken = authData.id_token
