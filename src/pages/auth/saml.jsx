@@ -21,7 +21,7 @@ import {
  *  @returns {object} userData conisting of {string} idToken and {string} userId
  *  
  */
-const signInWithGoogle = () => {
+export const signInWithGoogle = () => {
   const authUrl = getOpenSamlUrl(IdP,clientId,redirectUri,IdPScope)
   //TODO: don't forget to impement the mehtod down below
   const auth_code = extractCode(authUrl)

@@ -1,6 +1,8 @@
-import { FaGithub } from "react-icons/fa";
+// import { FaGithub } from "react-icons/fa";
+import { Button } from "@material-tailwind/react";
 import Logo from "../../assets/img/logo.png";
 import { Link } from "react-router-dom";
+import { signInWithGoogle } from "../auth/saml";
 
 export default function Header() {
   return (
@@ -18,7 +20,7 @@ export default function Header() {
               <p>Challange</p>
             </h1>
           </div>
-          <div>
+          {/* <div>
             <a
               href="https://github.com/Metax7/JS30"
               target="_blank"
@@ -27,6 +29,11 @@ export default function Header() {
             >
               <FaGithub />
             </a>
+          </div> */}
+          <div>
+            <Button onClick={signInWithGoogle}>
+              Sign In
+            </Button>
           </div>
         </div>
       </div>
