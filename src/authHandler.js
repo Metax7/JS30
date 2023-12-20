@@ -1,5 +1,7 @@
 import { getOAuth, postOAuth } from './client'
-
+const domain = import.meta.env.VITE_JS30_FULL_DOMAIN
+const clientId = import.meta.env.VITE_JS30_IDP_CLIENT_ID
+const redirectUri = domain === 'local' ? 'http://localhost:5173' : domain.startsWith('dev') ? `http://${domain}` : `https://${domain}`
 const tokenUrlSuffix = '/oauth2/token'
 const infoUrlSuffix = '/oauth2/userInfo'
 const oauth2Headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -10,8 +12,6 @@ const codeChallengeMethod = 'S256'
 /**
  * 
  * @param {string} IdentityProvider - name of Identity Provider such as Google, Facebook etc
- * @param {string} clientId - id of Application Client registered in Cognito Userpool
- * @param {string} redirectUri - uri to be redirected - The URL where the authentication server redirects the browser after Amazon Cognito authorizes the user.
  * @param {string} scope - Can be a combination of any system-reserved scopes or custom scopes that are associated with a client. Scopes must be separated by spaces.
  * @param {string} state - Additional computed value to guard against CSRF attacks.
  * @param {string} codeChallenge - The challenge that you generated from the code_verifier. Use for PKCE
@@ -22,39 +22,32 @@ const codeChallengeMethod = 'S256'
  */
 export const getOpenSamlUrl = (
     IdentityProvider,
-    clientId,
-    redirectUri,
     scope,
     state,
     codeChallenge) => {
 
 const authorizeUrlSuffix =  '/oauth2/authorize'
 const params = {}
-params.append("identity_provider", IdentityProvider)
-params.append("response_type", "CODE")
-params.append("client_id", clientId)
-params.append("redirect_uri", redirectUri)
-params.append("scope", scope)
+
+params.identity_provider = IdentityProvider
+params.response_type = 'code'
+params.client_id = clientId
+params.redirect_uri = redirectUri
+params.scope = scope
 if (state !== undefined && state!== null) {
-    params.append("STATE", state)
+    params.STATE = state
 }
 if (codeChallenge !== undefined && codeChallenge !== null) {
-        params.append("code_challenge_method", codeChallengeMethod)
-        params.append("code_challenge", codeChallenge)
+        params.code_challenge_method = codeChallengeMethod
+        params.code_challenge = codeChallenge
     }
 
-
 getOAuth(authorizeUrlSuffix, params)
-    
-// const ff = `${cognitoHost}/oauth2/authorize?identity_provider=${IdentityProvider}
-// &response_type=CODE&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
     
 }
 /**
  * 
- * @param {string} clientId - id of Application Client registered in Cognito Userpool
  * @param {string} authorizationCode - code of grant_type to be exchanged to Authorization Token
- * @param {string} redirectUri - Must be the same redirect_uri that was used to get authorization_code in /oauth2/authorize.
  * @param {string} codeVerifier - The proof key. Required if the authorization code was requested with PKCE.
  * 
  * @returns {string}  {
@@ -66,20 +59,35 @@ getOAuth(authorizeUrlSuffix, params)
                             }
  */
 export const xChange = async (
-    clientId,
     authorizationCode,
-    redirectUri,
     codeVerifier) => {
     const body = {}
-    body.append('grant_type','authorization_code')
-    body.append('client_id', clientId)
-    body.append('code', authorizationCode)
-    body.append('redirect_uri', redirectUri)
+    body.grant_type  ='authorization_code'
+    body.client_id = clientId
+    body.code = authorizationCode
+    body.redirect_uri = redirectUri
 
     if(codeVerifier!==undefined && codeVerifier!==null) {
-        body.append('code_verifier', codeVerifier)
+        body.code_verifier = codeVerifier
     }
-    postOAuth(tokenUrlSuffix, oauth2Headers, body)
+
+    try {
+        const authData = await postOAuth(tokenUrlSuffix, oauth2Headers, body)
+        if (authData !== undefined && authData !== null) {
+          return authData
+        }
+      } catch (error) {
+        console.error(
+          "Ошибка во время запроса:",
+          error.response || error.message || error
+        );
+        errorNotification(
+          `Errow while requesting data`,
+          `${error.message} ${error.stack}`,
+          10,
+          "bottomLeft"
+        );
+      }  
 }
 
 /**
@@ -94,11 +102,11 @@ export const xChange = async (
                         "expires_in":3600
                         }
  */
-export const refreshToken = async (clientId, refreshToken) => {
+export const refreshToken = async ( refreshToken) => {
     const body = {}
-    body.append('grant_type','refresh_token')
-    body.append('client_id', clientId)
-    body.append('refresh_token', refreshToken)
+    body.grant_type = 'refresh_token'
+    body.client_id = clientId
+    body.refresh_token = refreshToken
     
     postOAuth(tokenUrlSuffix, oauth2Headers, body)
 }
@@ -107,8 +115,8 @@ export const revokeToken = async () => {
     const revokeUrlSuffix = '/oauth2/revoke'
     const body = {
     }
-    body.append('token', token)
-    body.append('client_id', clientId)
+    body.token = token
+    body.client_id = clientId
 
     postOAuth(revokeUrlSuffix,oauth2Headers,body)
 }
@@ -124,8 +132,8 @@ export const revokeToken = async () => {
  */
 export const getUserInfo = async (accessToken) => {
     const headers = {}
-    headers.append('Content-Type', 'application/x-amz-json-1.1')
-    headers.append('Authorization', `Bearer ${token}`)
+    headers[Content-Type] = "application/x-amz-json-1.1"
+    headers.Authorization =  `Bearer ${token}`
 
     postOAuth(infoUrlSuffix, headers)
 }
