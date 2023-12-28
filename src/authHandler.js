@@ -42,7 +42,7 @@ if (codeChallenge !== undefined && codeChallenge !== null) {
         params.code_challenge = codeChallenge
     }
 
-getOAuth(authorizeUrlSuffix, params)
+    //TODO: implement a method that builds a href to redirect to. 
     
 }
 /**
