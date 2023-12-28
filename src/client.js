@@ -94,13 +94,15 @@ export const fetchAllItemsAndLikes = async () => {
 
 // export const getOAuth = async () => {
 
-//   const response =  await axios.get("https://js30localdevwfi.auth.us-west-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&response_type=CODE&client_id=1rq65aa262uk8bmvbunb8fqg31&redirect_uri=http://localhost:5173&scope=aws.cognito.signin.user.admin email openid")
+//   const response =  await axios.get("https://js30localdevwfi.auth.us-west-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&response_type=CODE&client_id=1rq65aa262uk8bmvbunb8fqg31&redirect_uri=http://localhost:5173&scope=aws.cognito.signin.user.admin email openid profile")
 
 //   return checkStatus(response)
 // }
 
 
 /**
+ * 
+ * @deprecated
  * 
  * @param {string} urlSuffix 
  * @param {Object} params 
