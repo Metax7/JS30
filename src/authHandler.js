@@ -1,6 +1,7 @@
 import { getOAuth, postOAuth } from './client'
 const domain = import.meta.env.VITE_JS30_FULL_DOMAIN
 const clientId = import.meta.env.VITE_JS30_IDP_CLIENT_ID
+const cognitoHost = import.meta.env.VITE_JS30_AUTHORIZER_URL
 const redirectUri = domain === 'local' ? 'http://localhost:5173' : domain.startsWith('dev') ? `http://${domain}` : `https://${domain}`
 const tokenUrlSuffix = '/oauth2/token'
 const infoUrlSuffix = '/oauth2/userInfo'
@@ -18,32 +19,32 @@ const codeChallengeMethod = 'S256'
  * 
  * @see https://datatracker.ietf.org/doc/html/rfc7636
  * 
- * @returns {string} callback url with Authorization Code
+ * @returns {string} an Url
  */
-export const getOpenSamlUrl = (
+export const getOICDUrl = (
     IdentityProvider,
     scope,
     state,
     codeChallenge) => {
 
 const authorizeUrlSuffix =  '/oauth2/authorize'
-const params = {}
+const params = []
 
-params.identity_provider = IdentityProvider
-params.response_type = 'code'
-params.client_id = clientId
-params.redirect_uri = redirectUri
-params.scope = scope
+params.push(`identity_provider=${IdentityProvider}`)
+params.push("response_type=code")
+params.push(`client_id=${clientId}`)
+params.push(`redirect_uri=${redirectUri}`)
+params.push(`scope=${scope}`)
+
 if (state !== undefined && state!== null) {
-    params.STATE = state
+    params.push(`state=${state}`)
 }
 if (codeChallenge !== undefined && codeChallenge !== null) {
-        params.code_challenge_method = codeChallengeMethod
-        params.code_challenge = codeChallenge
+        params.push(`code_challenge_method=${codeChallengeMethod}`)  
+        params.push(`code_challenge=${codeChallenge}`)
     }
 
-    //TODO: implement a method that builds a href to redirect to. 
-    
+    return `${cognitoHost}${authorizeUrlSuffix}?${params.join('&')}`
 }
 /**
  * 
