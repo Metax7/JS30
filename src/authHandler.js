@@ -1,4 +1,4 @@
-import { getOAuth, postOAuth } from './client'
+import { postOAuth } from './client'
 const domain = import.meta.env.VITE_JS30_FULL_DOMAIN
 const clientId = import.meta.env.VITE_JS30_IDP_CLIENT_ID
 const cognitoHost = import.meta.env.VITE_JS30_AUTHORIZER_URL
@@ -7,6 +7,7 @@ const tokenUrlSuffix = '/oauth2/token'
 const infoUrlSuffix = '/oauth2/userInfo'
 const oauth2Headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
 const codeChallengeMethod = 'S256'
+const OAUTH_STATE_KEY = 'react-use-oauth2-state-key';
 
 // TODO: Wrap everything in TryCatch
 
@@ -21,7 +22,7 @@ const codeChallengeMethod = 'S256'
  * 
  * @returns {string} an Url
  */
-export const getOICDUrl = (
+export const getOIDCUrl = (
     IdentityProvider,
     scope,
     state,
@@ -112,11 +113,11 @@ export const refreshToken = async ( refreshToken) => {
     postOAuth(tokenUrlSuffix, oauth2Headers, body)
 }
 
-export const revokeToken = async () => {
+export const revokeToken = async (refreshToken) => {
     const revokeUrlSuffix = '/oauth2/revoke'
     const body = {
     }
-    body.token = token
+    body.token = refreshToken
     body.client_id = clientId
 
     postOAuth(revokeUrlSuffix,oauth2Headers,body)
@@ -134,29 +135,50 @@ export const revokeToken = async () => {
 export const getUserInfo = async (accessToken) => {
     const headers = {}
     headers[Content-Type] = "application/x-amz-json-1.1"
-    headers.Authorization =  `Bearer ${token}`
+    headers.Authorization =  `Bearer ${accessToken}`
 
     postOAuth(infoUrlSuffix, headers)
 }
 
-
-/**
- * extract Autorization Code from callback uri
- * @todo - Implement this method to extract authentication code form the url
- * @param {string} responseUrl 
- * @returns {string} - Authorization Code that is intended to be exchanged to access-, refresh, and id-tokens 
- */
-export const extractCode = responseUrl => {
-    // TODO: Write extracter
-    return "NOT IMPLEMENTED YET"
-}
 
 export const getChallengePKCE = () => {
     // TODO: Implement
     return "get Challenge NOT IMPLEMENTED YET"
 }
 
-export const getState = () => {
-    // TODO: Implement
-    return "getState NOT IMPLEMENTED YET"
+/**
+ * Generate and get a state value to mitigate CSRF attacks
+ * @returns {String} generated pseudo-random value
+ */
+export const generateState = () => {
+    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let array = new Uint8Array(40);
+	window.crypto.getRandomValues(array);
+	array = array.map((x) => validChars.codePointAt(x % validChars.length));
+	const randomState = String.fromCharCode.apply(null, array);
+	return randomState;
 }
+
+/**
+ * 
+ * @param {String} generated state to be compared to 
+ */
+
+export const saveState = (state) => {
+	sessionStorage.setItem(OAUTH_STATE_KEY, state);
+};
+
+export const removeState = () => {
+	sessionStorage.removeItem(OAUTH_STATE_KEY);
+};
+
+
+/**
+ * 
+ * @param {String} receivedState to be checked against generated state saved previously 
+ * @returns {boolean} true if recieved state equals the generated one. Else false. 
+ */
+export const checkState = (receivedState) => {
+	const state = sessionStorage.getItem(OAUTH_STATE_KEY);
+	return state === receivedState;
+};

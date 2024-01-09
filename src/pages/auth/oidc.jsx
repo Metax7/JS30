@@ -1,5 +1,4 @@
 import { 
-  getOpenSamlUrl,
   refreshToken,
   xChange,
   extractCode, 
@@ -10,7 +9,7 @@ import {
 } from "../../authHandler"
 
 const IdP = 'Google'
-const IdPScope = "aws.cognito.signin.user.admin email openid profile"
+const GoogleScope = import.meta.env.VITE_JS30_GOOGLE_SCOPE
 import { useLocation } from "react-router-dom"
 import { useNavigate } from 'react-router-dom'
 /**
@@ -20,9 +19,9 @@ import { useNavigate } from 'react-router-dom'
  *  @returns {object} userData conisting of {string} idToken and {string} userId
  *  
  */
-export const signInOICD = () => {
+export const signInOIDC = () => {
   const location = useLocation()
-  const navigate = useNavigate
+  const navigate = useNavigate()
   const authCode = new URLSearchParams(location.search).get('code')
   if (authCode) {
     const authData = xChange(authCode)
@@ -36,4 +35,5 @@ export const signInOICD = () => {
     localStorage.setItem('userData', JSON.stringify(userData))
     navigate('/')
   }
+  return <></>
 }

@@ -15,7 +15,7 @@ env:
     JS30_AUTHORIZER_URL: "/sandbox/metax7/js30/dev/JS30_AUTHORIZER_URL"
     JS30_CACHE_CONTROL: "/sandbox/metax7/js30/dev/JS30_CACHE_CONTROL"
     JS30_IDP_CLIENT_ID: "/sandbox/metax7/js30/dev/JS30_IDP_CLIENT_ID"
-
+    JS30_GOOGLE_SCOPE: "/sandbox/metax7/js30/dev/JS30_GOOGLE_SCOPE"
 phases:
   install:
     on-failure: ABORT
@@ -37,12 +37,14 @@ phases:
       - echo "JS30_ENV ${JS30_ENV}"
       - echo "JS30_AUTH_HEADER ${JS30_AUTH_HEADER}"
       - echo "JS30_API_GW_URL ${JS30_API_GW_URL}"
-      - echo "JS30_API_GW_URL ${JS30_AUTH_TOKEN}"
+      - echo "JS30_AUTH_TOKEN ${JS30_AUTH_TOKEN}"
       - echo "JS30_APP_NAME ${JS30_APP_NAME}"
       - echo "JS30_IDP_URL ${JS30_IDP_URL}"
       - echo "JS30_AUTHORIZER_URL ${JS30_AUTHORIZER_URL}"
       - echo "JS30_CACHE_CONTROL ${JS30_CACHE_CONTROL}"
-      - echo " JS30_IDP_CLIENT_ID {JS30_IDP_CLIENT_ID}"
+      - echo "JS30_IDP_CLIENT_ID {JS30_IDP_CLIENT_ID}"
+      - echo "JS30_GOOGLE_SCOPE ${JS30_GOOGLE_SCOPE}"
+      
   post_build:
     on-failure: ABORT
     commands:

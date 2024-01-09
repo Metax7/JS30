@@ -2,7 +2,7 @@
 import { Button } from "@material-tailwind/react";
 import Logo from "../../assets/img/logo.png";
 import { Link } from "react-router-dom";
-import { signInOICD } from "../auth/oicd";
+import { signInOIDC } from "../auth/oidc";
 
 export default function Header() {
   return (
@@ -31,7 +31,7 @@ export default function Header() {
             </a>
           </div> */}
           <div>
-            <Button onClick={signInOICD}>
+            <Button onClick={signInOIDC}>
               Sign In
             </Button>
           </div>

@@ -2,4 +2,4 @@
 <br><br>
 JS30 SPA
 <br><br>
-![JS30 Infrastructure](js30-infra-v2.jpg)
+![JS30 Infrastructure](js30-infra-v3.jpg)
